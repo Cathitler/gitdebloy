@@ -19,7 +19,7 @@ GITHUB_USERNAME = "mohas2p2"
 #GITHUB_TOKEN = "" wiilkawiilasha7
 GITHUB_TOKEN = ""
 
-# The folder where your Python files are located
+# The folder where your Python files are located (optional - will check current directory first)
 FILES_FOLDER = r"C:\Users\mss happy\Downloads\run1"  # CHANGE THIS
 
 # Your Git user info (MUST FILL THIS IN)
@@ -252,6 +252,29 @@ def cleanup_local_folder(repo_name, repo_folder):
         print(f"   ❌ Failed to clean up {repo_name}: {str(e)[:200]}")
         return False
 
+def find_source_file():
+    """Find run1.py file - first check current directory, then FILES_FOLDER"""
+    
+    # First, check current working directory
+    current_dir = os.getcwd()
+    current_run1 = os.path.join(current_dir, "run1.py")
+    
+    if os.path.exists(current_run1):
+        print(f"   ✅ Found run1.py in current directory: {current_run1}")
+        return current_run1
+    
+    # If not found in current directory, check FILES_FOLDER
+    files_folder_run1 = os.path.join(FILES_FOLDER, "run1.py")
+    if os.path.exists(files_folder_run1):
+        print(f"   ✅ Found run1.py in FILES_FOLDER: {files_folder_run1}")
+        return files_folder_run1
+    
+    # If not found in either location, return None
+    print(f"   ❌ run1.py not found in current directory or FILES_FOLDER")
+    print(f"      Current directory: {current_dir}")
+    print(f"      FILES_FOLDER: {FILES_FOLDER}")
+    return None
+
 def main():
     """Main function to run everything"""
     
@@ -272,23 +295,22 @@ def main():
     if not setup_git_config():
         print("⚠️  Continuing anyway...")
     
-    # Check if the files folder exists
-    if not os.path.exists(FILES_FOLDER):
-        print(f"\n❌ ERROR: Folder not found: {FILES_FOLDER}")
-        print("Please fix the FILES_FOLDER path in the script")
-        return
+    # Find the source file (check current directory first, then FILES_FOLDER)
+    print("\n📂 Looking for run1.py source file...")
+    source_file = find_source_file()
     
-    # Check if we have a file to copy (run1.py as base)
-    source_file = os.path.join(FILES_FOLDER, "run1.py")
-    if not os.path.exists(source_file):
-        print(f"\n❌ ERROR: run1.py not found in {FILES_FOLDER}")
-        print("Please make sure run1.py exists in your files folder")
+    if not source_file:
+        print(f"\n❌ ERROR: Could not find run1.py")
+        print("Please make sure run1.py is in the current directory or in FILES_FOLDER")
+        print(f"Current directory: {os.getcwd()}")
+        print(f"FILES_FOLDER: {FILES_FOLDER}")
         return
     
     # Create a list of repo names
     repo_names = [f"run{i}" for i in range(START_FROM, START_FROM + HOW_MANY)]
     
     print(f"\n📝 Will create these repositories: {repo_names[0]} to {repo_names[-1]}")
+    print(f"\n📄 Using source file: {source_file}")
     print("\n⏳ Starting process...\n")
     
     success_count = 0
