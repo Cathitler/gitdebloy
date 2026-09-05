@@ -27,7 +27,7 @@ GIT_USER_NAME = "mohas2p2"  # Your GitHub username
 GIT_USER_EMAIL = "suphonestex+kgujq@gmail.com"  # Your GitHub email - CHANGE THIS!
 
 # What number to start from (since you have up to run61)
-START_FROM = 388  # This will create run67, run68, run69, etc.
+START_FROM = 389  # This will create run67, run68, run69, etc.
 
 # How many repositories to create
 HOW_MANY = 1500  # CHANGE THIS - how many repos you want
